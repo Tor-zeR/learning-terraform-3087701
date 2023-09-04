@@ -36,17 +36,17 @@ resource "aws_instance" "blog" {
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
 
-  vpc_security_group_ids = [module.blog_sg.security_group_id]  
+  vpc_security_group_ids = [module.blog.security_group_id]  
 
   tags = {
     Name = "EC2 TF Instance"
   }
 }
 
-module "blog_sg" {
+module "blog" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
-  name = "blog_new_tfmodule"
+  name = "blog_sg"
 
   vpc_id              = module.vpc.public_subnets[0]
 
