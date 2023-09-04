@@ -11,7 +11,7 @@ data "aws_ami" "app_ami" {
     values = ["hvm"]
   }
 
-  owners = ["979382823631"] # Bitname
+  owners = ["979382823631"] # Bitnami
 }
 
 module "vpc" {
@@ -36,7 +36,7 @@ resource "aws_instance" "blog" {
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
 
-  vpc_security_group_ids = [module.blog.security_group_id]  
+  vpc_security_group_ids = [module.blog_sg.security_group_id]  # Use module.blog_sg here
 
   tags = {
     Name = "EC2 TF Instance"
@@ -51,11 +51,9 @@ module "alb" {
 
   load_balancer_type = "application"
 
-  vpc_id             = module.blog-vpc.vpc_id
-  subnets            = module.blog-vpc.public_subnets
-  security_groups    = [module.blog-sg.security_group_id]
-
- 
+  vpc_id             = module.vpc.vpc_id
+  subnets            = module.vpc.public_subnets
+  security_groups    = [module.blog_sg.security_group_id]  # Use module.blog_sg here
 
   target_groups = [
     {
@@ -72,7 +70,6 @@ module "alb" {
     }
   ]
 
-
   http_tcp_listeners = [
     {
       port               = 80
@@ -86,12 +83,12 @@ module "alb" {
   }
 }
 
-module "blog" {
+module "blog_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
   name = "blog-sg"
 
-  vpc_id              = module.vpc.public_subnets[0]
+  vpc_id              = module.vpc.vpc_id  # Use module.vpc.vpc_id here
 
   ingress_rules       = ["http-80-tcp" , "https-443-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
