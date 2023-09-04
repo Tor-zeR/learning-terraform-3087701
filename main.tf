@@ -51,9 +51,9 @@ module "alb" {
 
   load_balancer_type = "application"
 
-  vpc_id             = module.blog_vpc.vpc_id
-  subnets            = module.blog_vpc.public_subnets
-  security_groups    = [module.blog_sg.security_group_id]
+  vpc_id             = module.blog-vpc.vpc_id
+  subnets            = module.blog-vpc.public_subnets
+  security_groups    = [module.blog-sg.security_group_id]
 
  
 
@@ -89,7 +89,7 @@ module "alb" {
 module "blog" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
-  name = "blog_sg"
+  name = "blog-sg"
 
   vpc_id              = module.vpc.public_subnets[0]
 
