@@ -3,7 +3,7 @@ data "aws_ami" "app_ami" {
 
   filter {
     name   = "name"
-    values = [var.ami_filter.name]
+    values = [element(var.ami_filter.name, 0)] # Select the first element of the name list
   }
 
   filter {
@@ -11,7 +11,7 @@ data "aws_ami" "app_ami" {
     values = ["hvm"]
   }
 
-  owners = [var.ami_filter.owner]
+  owners = [element(var.ami_filter.owner, 0)] # Select the first element of the owner list
 }
 
 module "vpc" {
