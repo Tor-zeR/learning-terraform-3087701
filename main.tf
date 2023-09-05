@@ -22,7 +22,7 @@ module "vpc" {
 
   azs             = ["us-west-2a", "us-west-2b", "us-west-2c"]
   
-  public_subnets  = ["10.0.104.0/24", "10.0.105.0/24", "10.0.106.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 
   enable_nat_gateway = false
 
